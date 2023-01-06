@@ -1,0 +1,142 @@
+2021-05-10 08:52:45 =SUPERVISOR REPORT====
+     Supervisor: {<0.5682.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+
+2021-05-10 08:52:52 =SUPERVISOR REPORT====
+     Supervisor: {<0.5617.0>,rabbit_channel_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{pid,<0.5620.0>},{id,channel},{mfargs,{rabbit_channel,start_link,[1,<0.5611.0>,<0.5618.0>,<0.5611.0>,<<"172.20.0.4:58306 -> 172.20.0.7:5672">>,rabbit_framing_amqp_0_9_1,{user,<<"guest">>,[administrator],[{rabbit_auth_backend_internal,none}]},<<"/">>,[{<<"publisher_confirms">>,bool,true},{<<"exchange_exchange_bindings">>,bool,true},{<<"basic.nack">>,bool,true},{<<"consumer_cancel_notify">>,bool,true},{<<"connection.blocked">>,bool,true},{<<"authentication_failure_close">>,bool,true}],<0.5612.0>,<0.5619.0>]}},{restart_type,intrinsic},{shutdown,70000},{child_type,worker}]
+
+2021-05-11 04:13:39 =ERROR REPORT====
+** Generic server aten_detector terminating 
+** Last message in was poll
+** When Server state == {state,#Ref<0.3820961006.1906573313.141089>,5000,0.99,#{},#{}}
+** Reason for termination ==
+** {{timeout,{gen_server,call,[aten_sink,get_failure_probabilities]}},[{gen_server,call,2,[{file,"gen_server.erl"},{line,238}]},{aten_detector,handle_info,2,[{file,"src/aten_detector.erl"},{line,103}]},{gen_server,try_dispatch,4,[{file,"gen_server.erl"},{line,689}]},{gen_server,handle_msg,6,[{file,"gen_server.erl"},{line,765}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,226}]}]}
+2021-05-11 04:13:39 =CRASH REPORT====
+  crasher:
+    initial call: aten_detector:init/1
+    pid: <0.239.0>
+    registered_name: aten_detector
+    exception exit: {{timeout,{gen_server,call,[aten_sink,get_failure_probabilities]}},[{gen_server,call,2,[{file,"gen_server.erl"},{line,238}]},{aten_detector,handle_info,2,[{file,"src/aten_detector.erl"},{line,103}]},{gen_server,try_dispatch,4,[{file,"gen_server.erl"},{line,689}]},{gen_server,handle_msg,6,[{file,"gen_server.erl"},{line,765}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,226}]}]}
+    ancestors: [aten_sup,<0.235.0>]
+    message_queue_len: 2
+    messages: [poll,{#Ref<0.3820961006.1906573313.141123>,#{}}]
+    links: [<0.236.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 2586
+    stack_size: 28
+    reductions: 32846
+  neighbours:
+2021-05-11 04:13:39 =SUPERVISOR REPORT====
+     Supervisor: {local,aten_sup}
+     Context:    child_terminated
+     Reason:     {timeout,{gen_server,call,[aten_sink,get_failure_probabilities]}}
+     Offender:   [{pid,<0.239.0>},{id,aten_detector},{mfargs,{aten_detector,start_link,[]}},{restart_type,permanent},{shutdown,5000},{child_type,worker}]
+
+2021-05-11 06:31:47 =ERROR REPORT====
+** Generic server aten_detector terminating 
+** Last message in was poll
+** When Server state == {state,#Ref<0.3820961006.1906573313.195254>,5000,0.99,#{},#{}}
+** Reason for termination ==
+** {{timeout,{gen_server,call,[aten_sink,get_failure_probabilities]}},[{gen_server,call,2,[{file,"gen_server.erl"},{line,238}]},{aten_detector,handle_info,2,[{file,"src/aten_detector.erl"},{line,103}]},{gen_server,try_dispatch,4,[{file,"gen_server.erl"},{line,689}]},{gen_server,handle_msg,6,[{file,"gen_server.erl"},{line,765}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,226}]}]}
+2021-05-11 06:31:47 =CRASH REPORT====
+  crasher:
+    initial call: aten_detector:init/1
+    pid: <0.1929.0>
+    registered_name: aten_detector
+    exception exit: {{timeout,{gen_server,call,[aten_sink,get_failure_probabilities]}},[{gen_server,call,2,[{file,"gen_server.erl"},{line,238}]},{aten_detector,handle_info,2,[{file,"src/aten_detector.erl"},{line,103}]},{gen_server,try_dispatch,4,[{file,"gen_server.erl"},{line,689}]},{gen_server,handle_msg,6,[{file,"gen_server.erl"},{line,765}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,226}]}]}
+    ancestors: [aten_sup,<0.235.0>]
+    message_queue_len: 1
+    messages: [poll]
+    links: [<0.236.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 2586
+    stack_size: 28
+    reductions: 46301
+  neighbours:
+2021-05-11 06:31:47 =SUPERVISOR REPORT====
+     Supervisor: {local,aten_sup}
+     Context:    child_terminated
+     Reason:     {timeout,{gen_server,call,[aten_sink,get_failure_probabilities]}}
+     Offender:   [{pid,<0.1929.0>},{id,aten_detector},{mfargs,{aten_detector,start_link,[]}},{restart_type,permanent},{shutdown,5000},{child_type,worker}]
+
+2021-05-11 10:22:17 =SUPERVISOR REPORT====
+     Supervisor: {<0.735.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     shutdown
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+
+2021-05-11 10:38:54 =SUPERVISOR REPORT====
+     Supervisor: {<0.1124.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     shutdown
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+
+2021-05-12 03:35:55 =SUPERVISOR REPORT====
+     Supervisor: {<0.751.0>,rabbit_channel_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{pid,<0.754.0>},{id,channel},{mfargs,{rabbit_channel,start_link,[1,<0.739.0>,<0.752.0>,<0.739.0>,<<"172.18.0.6:35832 -> 172.18.0.8:5672">>,rabbit_framing_amqp_0_9_1,{user,<<"guest">>,[administrator],[{rabbit_auth_backend_internal,none}]},<<"/">>,[{<<"publisher_confirms">>,bool,true},{<<"exchange_exchange_bindings">>,bool,true},{<<"basic.nack">>,bool,true},{<<"consumer_cancel_notify">>,bool,true},{<<"connection.blocked">>,bool,true},{<<"authentication_failure_close">>,bool,true}],<0.741.0>,<0.753.0>]}},{restart_type,intrinsic},{shutdown,70000},{child_type,worker}]
+
+2021-05-12 03:37:32 =SUPERVISOR REPORT====
+     Supervisor: {<0.1135.0>,rabbit_channel_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{pid,<0.1138.0>},{id,channel},{mfargs,{rabbit_channel,start_link,[1,<0.1129.0>,<0.1136.0>,<0.1129.0>,<<"172.18.0.6:49808 -> 172.18.0.8:5672">>,rabbit_framing_amqp_0_9_1,{user,<<"guest">>,[administrator],[{rabbit_auth_backend_internal,none}]},<<"/">>,[{<<"publisher_confirms">>,bool,true},{<<"exchange_exchange_bindings">>,bool,true},{<<"basic.nack">>,bool,true},{<<"consumer_cancel_notify">>,bool,true},{<<"connection.blocked">>,bool,true},{<<"authentication_failure_close">>,bool,true}],<0.1130.0>,<0.1137.0>]}},{restart_type,intrinsic},{shutdown,70000},{child_type,worker}]
+
+2021-05-12 06:46:47 =SUPERVISOR REPORT====
+     Supervisor: {<0.2162.0>,rabbit_channel_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{pid,<0.2165.0>},{id,channel},{mfargs,{rabbit_channel,start_link,[1,<0.2146.0>,<0.2163.0>,<0.2146.0>,<<"172.18.0.5:42840 -> 172.18.0.6:5672">>,rabbit_framing_amqp_0_9_1,{user,<<"guest">>,[administrator],[{rabbit_auth_backend_internal,none}]},<<"/">>,[{<<"publisher_confirms">>,bool,true},{<<"exchange_exchange_bindings">>,bool,true},{<<"basic.nack">>,bool,true},{<<"consumer_cancel_notify">>,bool,true},{<<"connection.blocked">>,bool,true},{<<"authentication_failure_close">>,bool,true}],<0.2157.0>,<0.2164.0>]}},{restart_type,intrinsic},{shutdown,70000},{child_type,worker}]
+
+2021-05-12 06:49:50 =SUPERVISOR REPORT====
+     Supervisor: {<0.2487.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+
+2021-05-12 07:55:03 =SUPERVISOR REPORT====
+     Supervisor: {<0.4346.0>,rabbit_channel_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{pid,<0.4349.0>},{id,channel},{mfargs,{rabbit_channel,start_link,[1,<0.4335.0>,<0.4347.0>,<0.4335.0>,<<"172.18.0.4:51164 -> 172.18.0.6:5672">>,rabbit_framing_amqp_0_9_1,{user,<<"guest">>,[administrator],[{rabbit_auth_backend_internal,none}]},<<"/">>,[{<<"publisher_confirms">>,bool,true},{<<"exchange_exchange_bindings">>,bool,true},{<<"basic.nack">>,bool,true},{<<"consumer_cancel_notify">>,bool,true},{<<"connection.blocked">>,bool,true},{<<"authentication_failure_close">>,bool,true}],<0.4336.0>,<0.4348.0>]}},{restart_type,intrinsic},{shutdown,70000},{child_type,worker}]
+
+2021-05-12 08:18:58 =SUPERVISOR REPORT====
+     Supervisor: {<0.5116.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+
+2021-05-12 10:11:41 =SUPERVISOR REPORT====
+     Supervisor: {<0.5608.0>,rabbit_channel_sup}
+     Context:    shutdown_error
+     Reason:     noproc
+     Offender:   [{pid,<0.5611.0>},{id,channel},{mfargs,{rabbit_channel,start_link,[1,<0.5594.0>,<0.5609.0>,<0.5594.0>,<<"172.18.0.4:52452 -> 172.18.0.6:5672">>,rabbit_framing_amqp_0_9_1,{user,<<"guest">>,[administrator],[{rabbit_auth_backend_internal,none}]},<<"/">>,[{<<"publisher_confirms">>,bool,true},{<<"exchange_exchange_bindings">>,bool,true},{<<"basic.nack">>,bool,true},{<<"consumer_cancel_notify">>,bool,true},{<<"connection.blocked">>,bool,true},{<<"authentication_failure_close">>,bool,true}],<0.5595.0>,<0.5610.0>]}},{restart_type,intrinsic},{shutdown,70000},{child_type,worker}]
+
+2021-05-13 03:30:28 =SUPERVISOR REPORT====
+     Supervisor: {<0.760.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     shutdown
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+
+2021-05-13 03:30:28 =SUPERVISOR REPORT====
+     Supervisor: {<0.739.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     shutdown
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+
+2021-05-13 03:30:28 =SUPERVISOR REPORT====
+     Supervisor: {<0.808.0>,rabbit_channel_sup_sup}
+     Context:    shutdown_error
+     Reason:     shutdown
+     Offender:   [{nb_children,1},{id,channel_sup},{mfargs,{rabbit_channel_sup,start_link,[]}},{restart_type,temporary},{shutdown,infinity},{child_type,supervisor}]
+

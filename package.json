@@ -1,0 +1,67 @@
+{
+  "name": "wallet",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "knex": "knex",
+    "test": "mocha ./tests --recursive",
+    "test:cov": "nyc mocha ./tests --recursive && nyc report --reporter=lcov",
+    "lint": "eslint ./src"
+  },
+  "nyc": {
+    "include": [
+      "src"
+    ]
+  },
+  "dependencies": {
+    "amqplib": "^0.6.0",
+    "array-object-merge": "^1.2.1",
+    "awilix": "^3.0.5",
+    "bitcore-lib-cash": "^8.25.10",
+    "bitcore-mnemonic": "^8.22.0",
+    "bluebird": "^3.7.2",
+    "camelcase-keys": "^6.2.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "debug": "^4.1.1",
+    "decimal.js": "^10.2.0",
+    "dotenv": "^9.0.2",
+    "eth-hd-wallet": "^0.5.1",
+    "eth-sig-util": "^2.5.3",
+    "ethereumjs-common": "^1.5.2",
+    "ethereumjs-tx": "^2.1.2",
+    "ethereumjs-util": "^7.0.4",
+    "ethereumjs-wallet": "^1.0.0",
+    "ethers": "4.0.48",
+    "express": "^4.17.1",
+    "flake-idgen": "v1.4.0",
+    "fortmatic": "^2.2.1",
+    "ip": "v1.1.5",
+    "jayson": "^3.3.3",
+    "js-sha3": "^0.7.0",
+    "jssha": "^3.2.0",
+    "lodash": "^4.17.20",
+    "mongoose": "v5.9.24",
+    "node-fetch": "^2.6.1",
+    "sjcl": "^1.0.8",
+    "snakecase-keys": "^1.2.0",
+    "telegraf": "3.38.0",
+    "tinyqueue": "^2.0.3",
+    "tronweb": "^3.2.6",
+    "underscore": "^1.11.0",
+    "web3": "3.0.0-rc.4"
+  },
+  "devDependencies": {
+    "assert": "2.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3"
+  },
+  "pre-commit": {
+    "run": [
+      "lint"
+    ],
+    "colors": false
+  },
+  "license": "UNLICENSED"
+}

@@ -1,0 +1,293 @@
+version: "3"
+services:
+  mongo :
+    image: 'mongo:4.0'
+    container_name: 'wallet_mongo'
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE=$MONGO_INITDB_DATABASE
+    ports:
+      - '$DB_PORT:$DB_PORT'
+    volumes: 
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+      - dbdata:/data/db
+    restart: on-failure
+
+
+  rabbitmq:
+      image: rabbitmq:3-management-alpine
+      container_name: rabbitmq
+      volumes:
+        - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+        - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      ports:
+          - 5672:5672
+          - 15672:15672
+      restart: on-failure
+
+
+  wallet:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    ports:
+      - '$PORT:$PORT'
+    build: .
+    container_name: 'wallet'
+    depends_on:
+      - mongo
+      - rabbitmq
+    restart: on-failure
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      SERVER_SECRET: secret
+      # SERVICE_NAMES: FOR CURRENCY RUN
+      SERVICE_NAMES: eth,bnb,trx
+       # SERVICE_NAMES: FOR JOB CONTAINER SERVICE APP/ WORKER
+      SERVICE_TYPE: server
+      PARTITION: 0
+      RABBIT_HOSTNAME : rabbitmq
+
+
+      ETH_MINIMUM_BLOCK_CONFIRM: 1
+      ETH_SLEEP_TIME: 10
+      ETH_NODE_URL: wss://mainnet.infura.io/ws/v3/7dfb5a7cd8414702b6704bf0b8afe897
+      ETH_TESTNET_NODE_URL: wss://rinkeby.infura.io/ws/v3/7dfb5a7cd8414702b6704bf0b8afe897
+      
+      BNB_MINIMUM_BLOCK_CONFIRM: 1
+      BNB_SLEEP_TIME: 10
+      BNB_NODE_URL: https://bsc-dataseed.binance.org/
+      BNB_TESTNET_NODE_URL: https://apis.ankr.com/a8b9453e449241cf963095d14febf660/63b46c3b77a34d00e7b7c1c640d1714c/binance/full/test
+      BNB_GAS_PRICE: 20
+
+      TRX_TESTNET_NODE_URL: https://api.shasta.trongrid.io
+      TRX_NODE_URL: https://api.trongrid.io
+
+
+    command: npm start 
+
+  eth_monitor:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'eth_monitor'
+    depends_on:
+      - mongo
+      - rabbitmq
+    restart: on-failure
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_NAMES: FOR CURRENCY RUN
+      SERVICE_NAMES: eth
+        # SERVICE_NAMES: FOR JOB CONTAINER SERVICE APP/ WORKER
+      SERVICE_TYPE: worker
+      PARTITION: 0
+      RABBIT_HOSTNAME : rabbitmq
+
+      ETH_MINIMUM_BLOCK_CONFIRM: 1
+      ETH_SLEEP_TIME: 10
+      ETH_NODE_URL: wss://mainnet.infura.io/ws/v3/7dfb5a7cd8414702b6704bf0b8afe897
+      ETH_TESTNET_NODE_URL: wss://rinkeby.infura.io/ws/v3/7dfb5a7cd8414702b6704bf0b8afe897
+  
+    command: npm start
+
+  eth_transporter:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'eth_transporter'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_TYPES: FOR JOB CONTAINER SERVICE APP/ WORKER / LASTESTBLOCK/ PAYMENT/TRANSPORTER
+      SERVICE_TYPE: transporter
+      SERVICE_NAMES: eth
+      # IN MINUTE
+      ETH_TRANSPORTER_SLEEP_TIME: 2
+      ETH_NODE_URL: wss://mainnet.infura.io/ws/v3/1227767975494ee38ac2e3793278dc98
+      ETH_TESTNET_NODE_URL: wss://rinkeby.infura.io/ws/v3/1227767975494ee38ac2e3793278dc98
+      ETH_ESTIMATE_GAS_PRICE_URL: https://ethgasstation.info/api/ethgasAPI.json
+    command: npm start    
+
+
+  eth_payment:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'eth_payment'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_TYPES: FOR JOB CONTAINER SERVICE APP/ WORKER / LASTESTBLOCK/ PAYMENT/TRANSPORTER
+      SERVICE_TYPE: payment
+      SERVICE_NAMES: eth
+      # IN MINUTE
+      ETH_PAYMENT_SLEEP_TIME: 2
+      ETH_NODE_URL: wss://mainnet.infura.io/ws/v3/1227767975494ee38ac2e3793278dc98
+      ETH_TESTNET_NODE_URL: wss://rinkeby.infura.io/ws/v3/1227767975494ee38ac2e3793278dc98
+      ETH_ESTIMATE_GAS_PRICE_URL: https://ethgasstation.info/api/ethgasAPI.json
+    command: npm start      
+
+  bnb_monitor:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'bnb_monitor'
+    depends_on:
+      - mongo
+      - rabbitmq
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_NAMES: FOR CURRENCY RUN
+      SERVICE_NAMES: bnb
+        # SERVICE_NAMES: FOR JOB CONTAINER SERVICE APP/ WORKER
+      SERVICE_TYPE: worker
+      PARTITION: 0
+      RABBIT_HOSTNAME : rabbitmq
+
+      BNB_MINIMUM_BLOCK_CONFIRM: 1
+      BNB_SLEEP_TIME: 10
+      BNB_NODE_URL: https://bsc-dataseed.binance.org/
+      BNB_TESTNET_NODE_URL: https://apis.ankr.com/a8b9453e449241cf963095d14febf660/63b46c3b77a34d00e7b7c1c640d1714c/binance/full/test
+      BNB_GAS_PRICE: 20
+
+    command: npm start
+
+  bnb_transporter:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'bnb_transporter'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_TYPES: FOR JOB CONTAINER SERVICE APP/ WORKER / LASTESTBLOCK/ PAYMENT/TRANSPORTER
+      SERVICE_TYPE: transporter
+      SERVICE_NAMES: bnb
+      # IN MINUTE
+      BNB_TRANSPORTER_SLEEP_TIME: 2
+      BNB_SLEEP_TIME: 10
+      BNB_NODE_URL: https://bsc-dataseed.binance.org/
+      BNB_TESTNET_NODE_URL: https://apis.ankr.com/a8b9453e449241cf963095d14febf660/63b46c3b77a34d00e7b7c1c640d1714c/binance/full/test
+      BNB_GAS_PRICE: 20
+    command: npm start    
+
+
+  bnb_payment:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'bnb_payment'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_TYPES: FOR JOB CONTAINER SERVICE APP/ WORKER / LASTESTBLOCK/ PAYMENT/TRANSPORTER
+      SERVICE_TYPE: payment
+      SERVICE_NAMES: bnb
+      # IN MINUTE
+      BNB_PAYMENT_SLEEP_TIME: 2
+      BNB_SLEEP_TIME: 10
+      BNB_NODE_URL: https://bsc-dataseed.binance.org/
+      BNB_TESTNET_NODE_URL: https://apis.ankr.com/a8b9453e449241cf963095d14febf660/63b46c3b77a34d00e7b7c1c640d1714c/binance/full/test
+      BNB_GAS_PRICE: 20
+    command: npm start  
+    
+  trx_monitor:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'trx_monitor'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_NAMES: FOR CURRENCY RUN
+      SERVICE_NAMES: trx
+        # SERVICE_NAMES: FOR JOB CONTAINER SERVICE APP/ WORKER
+      SERVICE_TYPE: worker
+      PARTITION: 0
+      RABBIT_HOSTNAME : '$RABBIT_HOSTNAME'
+      TRX_MINIMUM_BLOCK_CONFIRM: 20
+      TRX_TESTNET_NODE_URL: https://api.shasta.trongrid.io
+      TRX_NODE_URL: https://api.trongrid.io
+      TRX_SLEEP_TIME : 10
+    command: npm start   
+  trx_transporter:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'trx_transporter'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_NAMES: FOR CURRENCY RUN
+      SERVICE_NAMES: trx
+        # SERVICE_NAMES: FOR JOB CONTAINER SERVICE APP/ WORKER
+      SERVICE_TYPE: transporter
+      PARTITION: 0
+      RABBIT_HOSTNAME : '$RABBIT_HOSTNAME'
+      TRX_TESTNET_NODE_URL: https://api.shasta.trongrid.io
+      TRX_NODE_URL: https://api.trongrid.io
+      TRX_TRANSPORTER_SLEEP_TIME : 5
+    command: npm start   
+  trx_payment:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'trx_payment'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_NAMES: FOR CURRENCY RUN
+      SERVICE_NAMES: trx
+        # SERVICE_NAMES: FOR JOB CONTAINER SERVICE APP/ WORKER
+      SERVICE_TYPE: payment
+      PARTITION: 0
+      RABBIT_HOSTNAME : '$RABBIT_HOSTNAME'
+      TRX_TESTNET_NODE_URL: https://api.shasta.trongrid.io
+      TRX_NODE_URL: https://api.trongrid.io
+      TRX_PAYMENT_SLEEP_TIME : 2
+    command: npm start    
+
+  latest_block:
+    image: 'wallet/blockchain_wallet:${TAG:-latest}'
+    env_file: .env
+    container_name: 'latest_block'
+    depends_on:
+      - mongo
+    restart: always  
+    environment:
+      NODE_ENV: '$NODE_ENV'
+      DEBUG: wallet:*
+      # SERVICE_TYPES: FOR JOB CONTAINER SERVICE APP/ WORKER / LASTESTBLOCK/ PAYMENT
+      SERVICE_TYPE: latest_block
+      SERVICE_NAMES: eth
+      RABBIT_HOSTNAME : '$RABBIT_HOSTNAME'
+      # IN MINUTE
+      LATEST_BLOCK_SLEEP_TIME : 1
+  
+    command: npm start  
+    
+volumes:
+  dbdata:
+
+networks:
+  default:
+    external: 
+      name: exchange-network

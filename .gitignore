@@ -1,0 +1,3 @@
+node_modules/
+rabbitmq/data
+rabbitmq/logs
